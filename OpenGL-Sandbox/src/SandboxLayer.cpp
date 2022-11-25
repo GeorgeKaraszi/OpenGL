@@ -1,8 +1,32 @@
 #include "SandboxLayer.h"
 #include <stb_image.h>
+#include <array>
 
 using namespace GLCore;
 using namespace GLCore::Utils;
+
+struct Vec4
+{
+  float x, y, z, w;
+};
+
+struct Vec3
+{
+  float x, y, z;
+};
+
+struct Vec2
+{
+  float x, y;
+};
+
+struct Vertex
+{
+  Vec3  Position;
+  Vec4  Color;
+  Vec2  TexCoord;
+  float TexID;
+};
 
 static GLuint LoadTexture(const std::string &path)
 {
@@ -23,6 +47,37 @@ static GLuint LoadTexture(const std::string &path)
   stbi_image_free(pixels);
 
   return textureID;
+}
+
+static std::array<Vertex, 4> CreateQuad(float x, float y, float textureID)
+{
+  float size = 1.0f;
+
+  Vertex v0;
+  v0.Position = { x, y, 0.0f };
+  v0.Color    = { 0.18f, 0.6f, 0.96f, 1.0f };
+  v0.TexCoord = { 0.0f, 0.0f };
+  v0.TexID    = textureID;
+
+  Vertex v1;
+  v1.Position = { x + size, y, 0.0f };
+  v1.Color    = { 0.18f, 0.6f, 0.96f, 1.0f };
+  v1.TexCoord = { 1.0f, 0.0f };
+  v1.TexID    = textureID;
+
+  Vertex v2;
+  v2.Position = { x + size, y + size, 0.0f };
+  v2.Color    = { 0.18f, 0.6f, 0.96f, 1.0f };
+  v2.TexCoord = { 1.0f, 1.0f };
+  v2.TexID    = textureID;
+
+  Vertex v3;
+  v3.Position = { x, y + size, 0.0f };
+  v3.Color    = { 0.18f, 0.6f, 0.96f, 1.0f };
+  v3.TexCoord = { 0.0f, 1.0f };
+  v3.TexID    = textureID;
+
+  return { v0, v1, v2, v3 };
 }
 
 SandboxLayer::SandboxLayer() : m_CameraController(16.0f / 9.0f)
@@ -54,37 +109,21 @@ void SandboxLayer::OnAttach()
   glCreateVertexArrays(1, &m_QuadVA);
   glBindVertexArray(m_QuadVA);
 
-  // @formatter:off
-  float vertices[] = {
-      // X |   Y  |  Z  |   R  |  G   |  B  |  A   | Tex X | Tex Y | Tex IDX |IDX for Indices
-      -0.5f, -0.5f, 0.0f, 0.18f, 0.6f, 0.96f, 1.0f,  0.0f,    0.0f,   0.0f,      // 0
-       0.5f, -0.5f, 0.0f, 0.18f, 0.6f, 0.96f, 1.0f,  1.0f,    0.0f,   0.0f,      // 1
-       0.5f,  0.5f, 0.0f, 0.18f, 0.6f, 0.96f, 1.0f,  1.0f,    1.0f,   0.0f,      // 2
-      -0.5f,  0.5f, 0.0f, 0.18f, 0.6f, 0.96f, 1.0f,  0.0f,    1.0f,   0.0f,      // 3
-
-      // Other Square Spaced out correctly
-      1.5f, -0.5f, 0.0f, 1.0f, 0.93f, 0.24f, 1.0f,  0.0f,    0.0f,   1.0f,      // 4
-      2.5f, -0.5f, 0.0f, 1.0f, 0.93f, 0.24f, 1.0f,  1.0f,    0.0f,   1.0f,      // 5
-      2.5f,  0.5f, 0.0f, 1.0f, 0.93f, 0.24f, 1.0f,  1.0f,    1.0f,   1.0f,      // 6
-      1.5f,  0.5f, 0.0f, 1.0f, 0.93f, 0.24f, 1.0f,  0.0f,    1.0f,   1.0f,      // 7
-  };
-  // @formatter:on
-
   glCreateBuffers(1, &m_QuadVB);
   glBindBuffer(GL_ARRAY_BUFFER, m_QuadVB);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 1000, nullptr, GL_DYNAMIC_DRAW);
 
   glEnableVertexArrayAttrib(m_QuadVB, 0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *) offsetof(Vertex, Position));
 
   glEnableVertexArrayAttrib(m_QuadVB, 1);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (const void *) 12);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *) offsetof(Vertex, Color));
 
   glEnableVertexArrayAttrib(m_QuadVB, 2);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (const void *) 28);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *) offsetof(Vertex, TexCoord));
 
   glEnableVertexArrayAttrib(m_QuadVB, 3);
-  glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (const void *) 36);
+  glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *) offsetof(Vertex, TexID));
 
   uint32_t indices[] = {
       0, 1, 2, 2, 3, 0,
@@ -126,6 +165,17 @@ void SandboxLayer::OnUpdate(Timestep ts)
 {
   m_CameraController.OnUpdate(ts);
 
+  auto q0 = CreateQuad(m_QuadPosition[0], m_QuadPosition[1], 0.0f);
+  auto q1 = CreateQuad(0.5f, -0.5f, 1.0f);
+
+  Vertex vertices[8];
+  memcpy(vertices, q0.data(), sizeof(Vertex) * q0.size());
+  memcpy(vertices + q0.size(), q1.data(), sizeof(Vertex) * q1.size());
+
+  // Set dynamic vertex buffer
+  glBindBuffer(GL_ARRAY_BUFFER, m_QuadVB);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -137,9 +187,6 @@ void SandboxLayer::OnUpdate(Timestep ts)
   int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
   glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
 
-  location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Color");
-  glUniform4fv(location, 1, glm::value_ptr(m_SquareColor));
-
   glBindVertexArray(m_QuadVA);
   glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, nullptr);
 }
@@ -147,10 +194,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 void SandboxLayer::OnImGuiRender()
 {
   ImGui::Begin("Controls");
-  if (ImGui::ColorEdit4("Square Base Color", glm::value_ptr(m_SquareBaseColor)))
-  {
-    m_SquareColor = m_SquareBaseColor;
-  }
-  ImGui::ColorEdit4("Square Alternate Color", glm::value_ptr(m_SquareAlternateColor));
+  ImGui::DragFloat2("Quad Position", m_QuadPosition, 0.01f);
   ImGui::End();
+
 }
