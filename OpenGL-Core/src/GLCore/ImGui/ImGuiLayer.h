@@ -6,24 +6,25 @@
 #include "GLCore/Events/KeyEvent.h"
 #include "GLCore/Events/MouseEvent.h"
 
-namespace GLCore {
+namespace GLCore
+{
 
-	class ImGuiLayer : public Layer
-	{
-	public:
-		ImGuiLayer();
-		~ImGuiLayer() = default;
+  class ImGuiLayer : public Layer
+  {
+  public:
+    ImGuiLayer();
+    ~ImGuiLayer() = default;
 
-		virtual void OnAttach() override;
-		virtual void OnDetach() override;
+    virtual void OnAttach() override;
+    virtual void OnDetach() override;
 
-		void Begin();
-		void End();
+    void Begin();
+    void End();
 
-		virtual void ImGuiLayer::OnEvent(Event& event);
-		bool ImGuiLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e);
-	private:
-		float m_Time = 0.0f;
-	};
+    void OnEvent(Event &event);
+    bool OnMouseButtonPressed(MouseButtonPressedEvent &e);
+  private:
+    float m_Time = 0.0f;
+  };
 
 }

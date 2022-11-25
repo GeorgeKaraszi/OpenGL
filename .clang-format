@@ -1,0 +1,46 @@
+---
+Language: Cpp
+Standard: c++20
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 120
+ContinuationIndentWidth: 2
+
+AlignAfterOpenBracket: AlwaysBreak
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AlignConsecutiveAssignments: AcrossEmptyLines
+AlignConsecutiveBitFields: AcrossEmptyLines
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignEscapedNewlines: Left
+AlignOperands: Align
+
+BinPackArguments: false
+BinPackParameters: false
+
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Inline
+
+NamespaceIndentation: All
+
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: BeforeColon
+
+SpaceBeforeParens: Never
+SpaceInEmptyBlock: false
+SpaceBeforeRangeBasedForLoopColon: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: true
+SpacesBeforeTrailingComments: 5
+
+Cpp11BracedListStyle: false
+SpaceBeforeCpp11BracedList: true
+
+DerivePointerAlignment: false
+PointerAlignment: Right
+AlignArrayOfStructures: Right
+InsertTrailingCommas: Wrapped

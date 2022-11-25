@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.23)
+project(OPENGL_CHONO)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+include("cmake/conan.cmake")
+
+conan_cmake_run(
+        CONANFILE conanfile.txt
+        BASIC_SETUP CMAKE_TARGETS
+        BUILD missing
+)
+
+add_subdirectory(OpenGL-Core)
+add_subdirectory(OpenGL-Core/vendor/imgui)
+add_subdirectory(OpenGL-Examples)
+add_subdirectory(OpenGL-Sandbox)

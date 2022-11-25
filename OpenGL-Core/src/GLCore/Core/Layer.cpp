@@ -1,11 +1,12 @@
-#include "glpch.h"
+#include "glpch.hpp"
 #include "Layer.h"
 
-namespace GLCore {
+namespace GLCore
+{
 
-	Layer::Layer(const std::string& debugName)
-		: m_DebugName(debugName)
-	{
-	}
-	
+  Layer::Layer(const std::string &debugName)
+      : m_DebugName(debugName)
+  {
+  }
+
 }

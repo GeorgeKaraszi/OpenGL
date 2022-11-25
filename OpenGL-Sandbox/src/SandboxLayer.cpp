@@ -13,27 +13,27 @@ SandboxLayer::~SandboxLayer()
 
 void SandboxLayer::OnAttach()
 {
-	EnableGLDebugging();
+  EnableGLDebugging();
 
-	// Init here
+  // Init here
 }
 
 void SandboxLayer::OnDetach()
 {
-	// Shutdown here
+  // Shutdown here
 }
 
-void SandboxLayer::OnEvent(Event& event)
+void SandboxLayer::OnEvent(Event &event)
 {
-	// Events here
+  // Events here
 }
 
 void SandboxLayer::OnUpdate(Timestep ts)
 {
-	// Render here
+  // Render here
 }
 
 void SandboxLayer::OnImGuiRender()
 {
-	// ImGui here
+  // ImGui here
 }

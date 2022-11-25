@@ -1,0 +1,29 @@
+set(PROJECT_NAME OpenGL-Core)
+project(${PROJECT_NAME})
+
+set(PROJ_LIBS
+        CONAN_PKG::fmt
+        CONAN_PKG::glad
+        CONAN_PKG::glfw
+        CONAN_PKG::glm
+        CONAN_PKG::glew
+        CONAN_PKG::stb
+        CONAN_PKG::sdl
+        CONAN_PKG::spdlog
+        )
+
+include_directories(src)
+
+add_definitions(-DGLCORE_DEBUG)
+
+file(GLOB_RECURSE PROJ_SRC LIST_DIRECTORIES false src/*.cpp)
+
+add_library(${PROJECT_NAME} ${PROJ_SRC})
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/glpch.hpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/src;"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui"
+        )
+
+target_link_libraries(${PROJECT_NAME} ${PROJ_LIBS} ImGui)

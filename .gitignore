@@ -12,3 +12,5 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+cmake-*/
+.idea/
