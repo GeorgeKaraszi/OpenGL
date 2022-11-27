@@ -1,5 +1,6 @@
 #include "GLCore.h"
 #include "SandboxLayer.h"
+#include "ParticleLayer.hpp"
 
 using namespace GLCore;
 
@@ -8,7 +9,7 @@ class Sandbox : public Application
 public:
   Sandbox() :  Application("Sandbox", 1920, 1080)
   {
-    PushLayer(new SandboxLayer());
+    PushLayer(new ParticleLayer());
   }
 };
 

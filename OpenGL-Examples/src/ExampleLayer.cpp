@@ -9,11 +9,6 @@ ExampleLayer::ExampleLayer()
 
 }
 
-ExampleLayer::~ExampleLayer()
-{
-
-}
-
 void ExampleLayer::OnAttach()
 {
   EnableGLDebugging();
